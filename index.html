@@ -344,29 +344,29 @@
         };
 
         const preguntasProtocolo = [
-            { q: "Un padre pide información académica de su hijo mayor de edad. ¿Qué se requiere?", opciones: ["Solo la cédula del padre", "Carta o correo de autorización del estudiante", "Nada, por ser familiar se le entrega"], correcta: 1 },
-            { q: "¿Límite máximo de créditos para inscripción directa por asesor?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
-            { q: "¿Rango de nota para optar por Examen Extraordinario?", opciones: ["50 a 59 puntos", "60 a 69 puntos", "70 a 79 puntos"], correcta: 1 },
+            { q: "Un padre pide la nota final de su hijo mayor de edad. ¿Qué procede según el protocolo?", opciones: ["Entregar la información por ser el apoderado legal", "Solicitar autorización escrita o correo formal del estudiante", "Transferir la llamada al departamento legal"], correcta: 1 },
+            { q: "Si el patrono o cónyuge de un estudiante mayor de edad realiza gestiones, ¿qué se exige?", opciones: ["Autorización expresa firmada o correo formal del estudiante", "Presentar la cédula de identidad del tercero", "No se permite ninguna gestión por terceros"], correcta: 0 },
+            { q: "¿Límite máximo de créditos para inscripción directa por asesor?", opciones: ["15 créditos", "18 créditos", "20 créditos"], correcta: 1 },
+            { q: "Si un estudiante requiere más de 18 créditos para acelerar plan, ¿cómo se procesa?", opciones: ["El asesor lo aprueba de forma directa", "Se escala caso por levantamiento de requisitos", "Se rechaza la solicitud de forma definitiva"], correcta: 1 },
+            { q: "¿Rango de nota final elegible para optar por Examen Extraordinario?", opciones: ["50 a 59 puntos", "60 a 69 puntos", "70 a 79 puntos"], correcta: 1 },
+            { q: "¿Cómo se gestiona el aval institucional del Examen Extraordinario?", opciones: ["USAM consolida, inscribe en Class y el estudiante paga en U-Virtual", "El estudiante negocia la aprobación con el docente", "El asesor genera proforma manual de cobro"], correcta: 0 },
             { q: "¿Dónde se registra una consulta sobre el proceso de TCU en HubSpot?", opciones: ["Proceso de Grado", "Extensión e Internacionalización", "Información Académica"], correcta: 1 },
-            { q: "Un usuario presenta una propuesta de mejora. ¿En qué detalle de HubSpot se clasifica?", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
-            { q: "¿Cómo se otorga el aval institucional para los Exámenes Extraordinarios?", opciones: ["Directamente la Universidad consolida e inscribe en Class/U-Virtual", "El estudiante negocia con el docente", "Se solicita en ventanilla física"], correcta: 0 },
-            { q: "Consultas sobre el 'Calendario Académico' deben clasificarse como:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
-            { q: "La solicitud de credenciales de Office 365 va registrada en:", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 },
-            { q: "Si un estudiante requiere más de 18 créditos, ¿cuál es el canal de trámite?", opciones: ["Aprobación verbal del asesor", "Caso por levantamiento de requisitos", "Enviar correo a contabilidad"], correcta: 1 },
-            { q: "La solicitud de retiro o congelamiento de estudiante regular se clasifica en:", opciones: ["Proceso de Grado", "Baja de Carrera", "Acreditación"], correcta: 1 }
+            { q: "Una propuesta de mejora sobre el servicio se clasifica en HubSpot como:", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
+            { q: "Consultas sobre 'Calendario Académico' o 'Plan de Estudios' corresponden a:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
+            { q: "Trámites de 'Gestión Convenios', 'Proformas' o 'Consultas Giras' van en:", opciones: ["Aranceles y Matrículas", "Información Académica", "Extensión e Internacionalización"], correcta: 0 },
+            { q: "La solicitud de retiro o congelamiento de un estudiante regular va en:", opciones: ["Proceso de Grado", "Baja de Carrera", "Aranceles y Matrículas"], correcta: 1 },
+            { q: "Las consultas referentes a 'Proyecto Final' de graduación pertenecen a:", opciones: ["Proceso de Grado", "Información Académica", "Acreditación"], correcta: 0 }
         ];
 
         const preguntasCulturaGeneral = [
             { q: "🌐 CULTURA GENERAL: ¿Cuál es el océano más grande del planeta?", opciones: ["Océano Atlántico", "Océano Pacífico", "Océano Índico"], correcta: 1 },
-            { q: "🎨 CULTURA GENERAL: ¿Quién pintó la célebre obra 'La Mona Lisa'?", opciones: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso"], correcta: 1 },
+            { q: "🎨 CULTURA GENERAL: ¿Quién pintó la célebre obra 'La Mona Lisa'?", opciones: ["Vincent van Gogh", "Leonardo da Vinci", "Miguel Ángel"], correcta: 1 },
             { q: "🌍 CULTURA GENERAL: ¿Cuál es el río más largo del mundo?", opciones: ["Río Nilo", "Río Amazonas", "Río Misisipi"], correcta: 1 },
-            { q: "🏛️ CULTURA GENERAL: ¿En qué país se encuentran las famosas Pirámides de Guiza?", opciones: ["Grecia", "Egipto", "México"], correcta: 1 },
-            { q: "🚀 CULTURA GENERAL: ¿Cuál es el planeta más grande de nuestro sistema solar?", opciones: ["Saturno", "Júpiter", "Neptuno"], correcta: 1 },
-            { q: "📚 CULTURA GENERAL: ¿Quién escribió la novela 'Cien años de soledad'?", opciones: ["Mario Vargas Llosa", "Gabriel García Márquez", "Isabel Allende"], correcta: 1 },
-            { q: "🎵 CULTURA GENERAL: ¿Cuántas notas musicales existen en la escala diatónica natural?", opciones: ["5 notas", "7 notas", "12 notas"], correcta: 1 },
-            { q: "🏔️ CULTURA GENERAL: ¿En qué cordillera se encuentra la montaña Everest?", opciones: ["Los Andes", "El Himalaya", "Los Alpes"], correcta: 1 },
-            { q: "🔬 CULTURA GENERAL: ¿Cuál es el elemento químico más abundante en la atmósfera terrestre?", opciones: ["Oxígeno", "Nitrógeno", "Hidrógeno"], correcta: 1 },
-            { q: "🎬 CULTURA GENERAL: ¿Qué película ganó el primer Oscar a la Mejor Película de Animación?", opciones: ["Toy Story", "Shrek", "El Rey León"], correcta: 1 }
+            { q: "🏛️ CULTURA GENERAL: ¿En qué país se ubican las Pirámides de Guiza?", opciones: ["Grecia", "Egipto", "México"], correcta: 1 },
+            { q: "🚀 CULTURA GENERAL: ¿Cuál es el planeta más grande del sistema solar?", opciones: ["Saturno", "Júpiter", "Neptuno"], correcta: 1 },
+            { q: "📚 CULTURA GENERAL: ¿Quién escribió 'Cien años de soledad'?", opciones: ["Mario Vargas Llosa", "Gabriel García Márquez", "Isabel Allende"], correcta: 1 },
+            { q: "🎵 CULTURA GENERAL: ¿Cuántas notas tiene la escala diatónica natural?", opciones: ["5 notas", "7 notas", "12 notas"], correcta: 1 },
+            { q: "🏔️ CULTURA GENERAL: ¿En qué cordillera se sitúa el monte Everest?", opciones: ["Los Andes", "El Himalaya", "Los Alpes"], correcta: 1 }
         ];
 
         const casosPracticos = [
@@ -502,12 +502,10 @@
                 seleccionP = casosPracticos[Math.floor(Math.random() * casosPracticos.length)];
                 titulo.innerText = `🎭 DESAFÍO DE SIMULACIÓN - ${eqActual.nombre}`;
             } else if (tipo === 'companero') {
-                // Selecciona aleatoriamente entre protocolo y cultura general para la ayuda colaborativa
                 const bancoMixto = [...preguntasProtocolo, ...preguntasCulturaGeneral];
                 seleccionP = bancoMixto[Math.floor(Math.random() * bancoMixto.length)];
                 titulo.innerText = `🤝 DESAFÍO COLABORATIVO - ${eqActual.nombre}`;
             } else {
-                // Alterna entre preguntas de protocolo (60% probabilidad) y cultura general (40% probabilidad)
                 const esCulturaGeneral = Math.random() < 0.4;
                 if (esCulturaGeneral) {
                     seleccionP = preguntasCulturaGeneral[Math.floor(Math.random() * preguntasCulturaGeneral.length)];
@@ -592,5 +590,3 @@
     </script>
 </body>
 </html>
-
-
