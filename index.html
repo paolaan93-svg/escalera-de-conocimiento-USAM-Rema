@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escalera del Conocimiento USAM - Formación</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f4f8; padding: 15px; color: #102a43; }
+        h1 { color: #0b69a3; margin-bottom: 5px; }
+        
+        #marcadores { display: flex; justify-content: center; gap: 15px; margin: 15px 0; flex-wrap: wrap; }
+        .card-equipo { background: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; font-weight: bold; width: 140px; }
+        .turno-activo { border-color: #0b69a3 !important; background-color: #e6f6ff !important; transform: scale(1.05); }
+
+        #tablero { display: grid; grid-template-columns: repeat(6, 85px); gap: 10px; justify-content: center; margin: 15px auto; }
+        .casilla { width: 85px; height: 85px; background-color: #334e68; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; border-radius: 8px; font-size: 13px; position: relative; }
+        .casilla span { font-size: 9px; margin-top: 3px; font-weight: normal; text-align: center; }
+        
+        .ficha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin: 1px; border: 1px solid white; }
+        .e0 { background-color: #e53e3e; } /* Rojo */
+        .e1 { background-color: #3182ce; } /* Azul */
+        .e2 { background-color: #38a169; } /* Verde */
+        .e3 { background-color: #dd6b20; } /* Naranja */
+
+        .especial-avanza { background-color: #2f855a !important; }
+        .especial-companero { background-color: #0bc5ea !important; color: #000 !important; }
+        .especial-retrocede { background-color: #c53030 !important; }
+
+        button { padding: 10px 20px; font-size: 15px; font-weight: bold; background-color: #0b69a3; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background-color: #074d79; }
+        
+        #pregunta-box { display: none; background: white; border: 2px solid #0b69a3; padding: 20px; max-width: 500px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .btn-opcion { display: block; width: 100%; margin: 8px 0; background-color: #f0f4f8; color: #102a43; border: 1px solid #bccadc; text-align: left; padding: 10px; font-size: 14px; cursor: pointer; border-radius: 5px; }
+        .btn-opcion:hover { background-color: #d9e2ec; }
+    </style>
+</head>
+<body>
+
+    <h1>🎲 Escalera del Conocimiento USAM</h1>
+    <p>Formación interactiva - 1 Hora de Capacitación</p>
+    
+    <div id="marcadores"></div>
+
+    <button id="btn-dado" onclick="tirarDado()">Tirar Dado (Turno Actual) 🎲</button>
+    <h3 id="resultado-dado"></h3>
+
+    <div id="tablero"></div>
+
+    <div id="pregunta-box">
+        <h3 id="titulo-box" style="color: #0b69a3; margin-top:0;"></h3>
+        <p id="texto-pregunta"></p>
+        <div id="opciones"></div>
+    </div>
+
+    <script>
+        const equipos = [
+            { nombre: "Equipo Rojo", pos: 1, clase: "e0" },
+            { nombre: "Equipo Azul", pos: 1, clase: "e1" },
+            { nombre: "Equipo Verde", pos: 1, clase: "e2" },
+            { nombre: "Equipo Naranja", pos: 1, clase: "e3" }
+        ];
+        
+        let turno = 0;
+        const totalCasillas = 30;
+
+        const casillasEspeciales = {
+            6: { tipo: 'avanza', texto: '🚀 ¡Avance de área! +3 casillas', cant: 3 },
+            11: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
+            16: { tipo: 'retrocede', texto: '⚠️ ¡Falta de autorización! Retrocedes 2 casillas', cant: -2 },
+            21: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
+            26: { tipo: 'avanza', texto: '🚀 ¡Caso escalado con éxito! +2 casillas', cant: 2 }
+        };
+
+        const preguntas = [
+            { q: "Un padre pide información académica de su hijo mayor de edad. ¿Qué procede?", opciones: ["Entregar datos por ser familiar directo", "Exigir correo/carta formal firmada por el estudiante", "Dar información solo si paga la mensualidad"], correcta: 1 },
+            { q: "¿Cuál es el límite máximo de créditos que un asesor puede inscribir de forma directa?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
+            { q: "Si un estudiante requiere más de 18 créditos para acelerar plan, ¿qué se hace?", opciones: ["Inscribir directamente de palabra", "Escalar caso por levantamiento de requisitos", "Rechazar la solicitud de inmediato"], correcta: 1 },
+            { q: "¿Cuál es el rango de nota final para optar por Examen Extraordinario?", opciones: ["50 a 59", "60 a 69", "70 a 79"], correcta: 1 },
+            { q: "¿Cómo se otorga el aval institucional para los Exámenes Extraordinarios?", opciones: ["Directamente la Universidad consolida e inscribe en Class/U-Virtual", "El estudiante debe negociar con el docente", "El apoderado firma una carta"], correcta: 0 },
+            { q: "¿En qué detalle de HubSpot se registra una consulta sobre TCU?", opciones: ["Proceso de Grado", "Extensión e Internacionalización", "Información Académica"], correcta: 1 },
+            { q: "Las sugerencias y oportunidades de mejora deben clasificarse en:", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
+            { q: "Las consultas sobre 'Calendario Académico' van registradas bajo:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
+            { q: "Un estudiante pide credenciales de Office 365. ¿En qué detalle de HubSpot va?", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 },
+            { q: "Retiro o congelamiento de un estudiante regular se clasifica como:", opciones: ["Proceso de Grado", "Baja de Carrera", "Acreditación"], correcta: 1 }
+        ];
+
+        function renderMarcadores() {
+            const container = document.getElementById('marcadores');
+            container.innerHTML = '';
+            equipos.forEach((eq, index) => {
+                const card = document.createElement('div');
+                card.className = `card-equipo ${index === turno ? 'turno-activo' : ''}`;
+                card.style.borderLeftColor = index === 0 ? '#e53e3e' : index === 1 ? '#3182ce' : index === 2 ? '#38a169' : '#dd6b20';
+                card.innerHTML = `${eq.nombre}<br><small>Casilla: ${eq.pos}</small>`;
+                container.appendChild(card);
+            });
+        }
+
+        function crearTablero() {
+            const tablero = document.getElementById('tablero');
+            tablero.innerHTML = '';
+            for (let i = 1; i <= totalCasillas; i++) {
+                const casilla = document.createElement('div');
+                casilla.className = 'casilla';
+                
+                let etiqueta = `${i}`;
+                if (casillasEspeciales[i]) {
+                    const esp = casillasEspeciales[i];
+                    if (esp.tipo === 'avanza') { casilla.classList.add('especial-avanza'); etiqueta += '<span>🚀 +3</span>'; }
+                    if (esp.tipo === 'companero') { casilla.classList.add('especial-companero'); etiqueta += '<span>🤝 Ayuda</span>'; }
+                    if (esp.tipo === 'retrocede') { casilla.classList.add('especial-retrocede'); etiqueta += '<span>⚠️ -2</span>'; }
+                }
+
+                casilla.innerHTML = etiqueta;
+
+                // Fichas de equipos
+                const fichasDiv = document.createElement('div');
+                equipos.forEach((eq, idx) => {
+                    if (eq.pos === i) {
+                        const f = document.createElement('span');
+                        f.className = `ficha ${eq.clase}`;
+                        fichasDiv.appendChild(f);
+                    }
+                });
+                casilla.appendChild(fichasDiv);
+                tablero.appendChild(casilla);
+            }
+        }
+
+        function tirarDado() {
+            document.getElementById('btn-dado').disabled = true;
+            const dado = Math.floor(Math.random() * 4) + 1;
+            const eqActual = equipos[turno];
+
+            document.getElementById('resultado-dado').innerText = `${eqActual.nombre} tiró el dado y sacó: ${dado} 🎲`;
+            eqActual.pos = Math.min(eqActual.pos + dado, totalCasillas);
+            
+            actualizarInterfaz();
+            setTimeout(() => evaluarCasilla(), 600);
+        }
+
+        function evaluarCasilla() {
+            const eqActual = equipos[turno];
+            const especial = casillasEspeciales[eqActual.pos];
+
+            if (especial) {
+                if (especial.tipo === 'avanza') {
+                    alert(`¡Casilla Especial! ${especial.texto}`);
+                    eqActual.pos = Math.min(eqActual.pos + especial.cant, totalCasillas);
+                    actualizarInterfaz();
+                    pasoSiguiente();
+                } else if (especial.tipo === 'retrocede') {
+                    alert(`¡Casilla Trampa! ${especial.texto}`);
+                    eqActual.pos = Math.max(eqActual.pos + especial.cant, 1);
+                    actualizarInterfaz();
+                    pasoSiguiente();
+                } else if (especial.tipo === 'companero') {
+                    lanzarPregunta(true);
+                }
+            } else {
+                lanzarPregunta(false);
+            }
+        }
+
+        function lanzarPregunta(esCompanero) {
+            const randomP = preguntas[Math.floor(Math.random() * preguntas.length)];
+            const box = document.getElementById('pregunta-box');
+            const titulo = document.getElementById('titulo-box');
+            const texto = document.getElementById('texto-pregunta');
+            const opcionesDiv = document.getElementById('opciones');
+            const eqActual = equipos[turno];
+
+            if (esCompanero) {
+                titulo.innerText = `🤝 ¡DESAFÍO COLABORATIVO - ${eqActual.nombre}!`;
+                texto.innerHTML = `<strong>Elijan a un compañero de OTRO equipo para responder.</strong><br>Si responde correctamente: ¡Ambos equipos avanzan 2 casillas!<br><br><strong>Pregunta:</strong> ${randomP.q}`;
+            } else {
+                titulo.innerText = `❓ Pregunta para ${eqActual.nombre}`;
+                texto.innerText = randomP.q;
+            }
+
+            opcionesDiv.innerHTML = '';
+            randomP.opciones.forEach((op, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-opcion';
+                btn.innerText = `${String.fromCharCode(65 + index)}) ${op}`;
+                btn.onclick = () => responder(index === randomP.correcta, esCompanero);
+                opcionesDiv.appendChild(btn);
+            });
+
+            box.style.display = 'block';
+        }
+
+        function responder(esCorrecta, esCompanero) {
+            document.getElementById('pregunta-box').style.display = 'none';
+            const eqActual = equipos[turno];
+
+            if (esCompanero) {
+                if (esCorrecta) {
+                    alert("¡Respuesta Correcta! Excelente trabajo en equipo. Su equipo y el seleccionado avanzan 2 casillas.");
+                    eqActual.pos = Math.min(eqActual.pos + 2, totalCasillas);
+                } else {
+                    alert("Respuesta Incorrecta. No hay avance colaborativo en esta turno.");
+                }
+            } else {
+                if (esCorrecta) {
+                    alert("¡Correcto! Mantienen su posición.");
+                } else {
+                    alert("Respuesta incorrecta. Retroceden 1 casilla por fallo de protocolo.");
+                    eqActual.pos = Math.max(eqActual.pos - 1, 1);
+                }
+            }
+
+            if (eqActual.pos >= totalCasillas) {
+                alert(`🎉 ¡FELICIDADES! El ${eqActual.nombre} ha llegado a la meta y ganado el Torneo USAM.`);
+                return;
+            }
+
+            pasoSiguiente();
+        }
+
+        function pasoSiguiente() {
+            turno = (turno + 1) % equipos.length;
+            actualizarInterfaz();
+            document.getElementById('btn-dado').disabled = false;
+        }
+
+        function actualizarInterfaz() {
+            renderMarcadores();
+            crearTablero();
+        }
+
+        actualizarInterfaz();
+    </script>
+</body>
+</html>
