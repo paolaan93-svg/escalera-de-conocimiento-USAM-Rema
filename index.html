@@ -5,62 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escalera del Conocimiento USAM - Formación</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f4f8; padding: 10px; color: #102a43; margin: 0; }
-        h1 { color: #0b69a3; margin: 5px 0; font-size: 24px; }
-        p.sub { margin: 2px 0 10px 0; font-size: 14px; }
-        
-        #marcadores { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
-        .card-equipo { background: white; padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; font-weight: bold; width: 120px; font-size: 13px; }
-        .turno-activo { border-color: #0b69a3 !important; background-color: #e6f6ff !important; transform: scale(1.05); }
+        :root {
+            --primary: #003366;
+            --primary-light: #004080;
+            --accent: #ff9900;
+            --bg: #f4f7fa;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #cbd5e1;
+            
+            /* Colores de Casillas Especiales */
+            --color-felicitaciones: #f59e0b;
+            --color-avanza: #10b981;
+            --color-companero: #06b6d4;
+            --color-retrocede: #ef4444;
+            --color-caso: #8b5cf6;
+        }
 
-        /* Ajuste a 10 columnas fijas para encajar las 40 casillas */
-        #tablero { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-width: 950px; margin: 10px auto; }
-        .casilla { height: 60px; background-color: #334e68; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; border-radius: 6px; font-size: 12px; position: relative; }
-        .casilla span { font-size: 9px; margin-top: 1px; font-weight: normal; text-align: center; }
-        
-        .fichas-container { display: flex; gap: 2px; margin-top: 2px; }
-        .ficha { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid white; }
-        .e0 { background-color: #e53e3e; } 
-        .e1 { background-color: #3182ce; } 
-        .e2 { background-color: #38a169; } 
-        .e3 { background-color: #dd6b20; } 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        .especial-felicitaciones { background-color: #d69e2e !important; color: #000 !important; }
-        .especial-avanza { background-color: #2f855a !important; }
-        .especial-companero { background-color: #0bc5ea !important; color: #000 !important; }
-        .especial-retrocede { background-color: #c53030 !important; }
-        .especial-caso { background-color: #805ad5 !important; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
-        button { padding: 10px 20px; font-size: 15px; font-weight: bold; background-color: #0b69a3; color: white; border: none; border-radius: 6px; cursor: pointer; }
-        button:hover { background-color: #074d79; }
-        
-        #pregunta-box, #ganador-box { display: none; background: white; border: 2px solid #0b69a3; padding: 15px; max-width: 520px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .btn-opcion { display: block; width: 100%; margin: 6px 0; background-color: #f0f4f8; color: #102a43; border: 1px solid #bccadc; text-align: left; padding: 8px 12px; font-size: 13px; cursor: pointer; border-radius: 5px; }
-        .btn-opcion:hover { background-color: #d9e2ec; }
+        header {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        p.sub {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Contenedor de Marcadores */
+        #marcadores {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .card-equipo {
+            background: var(--card-bg);
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            border-left-width: 6px;
+            font-weight: 600;
+            width: 130px;
+            font-size: 13px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .turno-activo {
+            border-color: var(--primary) !important;
+            background-color: #f0f7ff !important;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,51,102,0.15);
+        }
+
+        /* Controles */
+        #panel-control {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button.btn-dado {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,51,102,0.2);
+            transition: all 0.2s ease;
+        }
+
+        button.btn-dado:hover:not(:disabled) {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,51,102,0.3);
+        }
+
+        button.btn-dado:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #resultado-dado {
+            margin-top: 8px;
+            font-size: 15px;
+            color: #334155;
+            font-weight: 600;
+            min-height: 22px;
+        }
+
+        /* Tablero 10x4 */
+        #tablero {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 960px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        }
+
+        .casilla {
+            height: 68px;
+            background-color: #334155;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 4px;
+            font-weight: 700;
+            border-radius: 8px;
+            font-size: 13px;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .casilla:hover {
+            transform: scale(1.03);
+            z-index: 2;
+        }
+
+        .casilla span {
+            font-size: 9px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1;
+            padding: 2px 4px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Fichas */
+        .fichas-container {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            align-items: center;
+            min-height: 12px;
+        }
+
+        .ficha {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .e0 { background-color: #ef4444; } 
+        .e1 { background-color: #3b82f6; } 
+        .e2 { background-color: #10b981; } 
+        .e3 { background-color: #f97316; } 
+
+        /* Clases Especiales Casillas */
+        .especial-felicitaciones { background-color: var(--color-felicitaciones) !important; color: #000 !important; }
+        .especial-avanza { background-color: var(--color-avanza) !important; }
+        .especial-companero { background-color: var(--color-companero) !important; color: #000 !important; }
+        .especial-retrocede { background-color: var(--color-retrocede) !important; }
+        .especial-caso { background-color: var(--color-caso) !important; }
+
+        /* Popups de Preguntas y Ganador */
+        #pregunta-box, #ganador-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            padding: 24px;
+            width: 90%;
+            max-width: 520px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        #titulo-box {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        #texto-pregunta {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #334155;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .btn-opcion {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .btn-opcion:hover {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        /* Overlay para oscurecer fondo al abrir modal */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 90;
+        }
     </style>
 </head>
 <body>
 
-    <h1>🎲 Escalera del Conocimiento USAM</h1>
-    <p class="sub">Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
+    <header>
+        <h1>🎲 Escalera del Conocimiento USAM</h1>
+        <p class="sub">Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
+    </header>
     
     <div id="marcadores"></div>
 
-    <button id="btn-dado" onclick="tirarDado()">Tirar Dado 🎲</button>
-    <h3 id="resultado-dado" style="margin: 8px 0; font-size: 16px;"></h3>
+    <div id="panel-control">
+        <button id="btn-dado" class="btn-dado" onclick="tirarDado()">Tirar Dado 🎲</button>
+        <div id="resultado-dado"></div>
+    </div>
 
     <div id="tablero"></div>
 
+    <div id="overlay"></div>
+
     <div id="pregunta-box">
-        <h3 id="titulo-box" style="color: #0b69a3; margin-top:0;"></h3>
+        <h3 id="titulo-box"></h3>
         <p id="texto-pregunta"></p>
         <div id="opciones"></div>
     </div>
 
     <div id="ganador-box">
-        <h2 style="color: #2f855a; margin-top:0;">🏆 ¡TENEMOS UN EQUIPO GANADOR! 🏆</h2>
-        <h3 id="nombre-ganador" style="color: #0b69a3;"></h3>
-        <p style="font-size: 15px; line-height: 1.5; color: #102a43; background: #e6f6ff; padding: 15px; border-radius: 8px; border: 1px dashed #0b69a3;">
+        <h2 style="color: var(--color-avanza); margin-bottom: 10px;">🏆 ¡TENEMOS UN EQUIPO GANADOR! 🏆</h2>
+        <h3 id="nombre-ganador" style="color: var(--primary); margin-bottom: 15px;"></h3>
+        <p style="font-size: 14px; line-height: 1.6; color: #334155; background: #f0f7ff; padding: 16px; border-radius: 8px; border: 1px dashed var(--primary); text-align: left;">
             🎉 <strong>¡Felicidades, campeones del Protocolo USAM!</strong><br><br>
             Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas y la correcta clasificación de casos en HubSpot.<br><br>
             Gracias a su excelencia y trabajo en equipo, garantizamos un servicio ético, ágil y profesional en Comunicaciones USAM. ¡Sigan liderando con el ejemplo! 👏✨
@@ -69,10 +304,10 @@
 
     <script>
         const equipos = [
-            { nombre: "Equipo Rojo", pos: 1, clase: "e0" },
-            { nombre: "Equipo Azul", pos: 1, clase: "e1" },
-            { nombre: "Equipo Verde", pos: 1, clase: "e2" },
-            { nombre: "Equipo Naranja", pos: 1, clase: "e3" }
+            { nombre: "Equipo Rojo", pos: 1, clase: "e0", color: "#ef4444" },
+            { nombre: "Equipo Azul", pos: 1, clase: "e1", color: "#3b82f6" },
+            { nombre: "Equipo Verde", pos: 1, clase: "e2", color: "#10b981" },
+            { nombre: "Equipo Naranja", pos: 1, clase: "e3", color: "#f97316" }
         ];
         
         let turno = 0;
@@ -118,7 +353,7 @@
             {
                 q: "🎭 SITUACIÓN: Un estudiante con nota final de 58 en una materia pide que le habiliten el Examen Extraordinario en la U-Virtual porque 'solo le faltaron 2 puntos'. ¿Qué le respondes?",
                 opciones: [
-                    "Le explicas que el criterio de elegibilidad institucional es strictly para notas entre 60 y 69 puntos.",
+                    "Le explicas que el criterio de elegibilidad institucional es estrictamente para notas entre 60 y 69 puntos.",
                     "Hablas con el docente para que le suba los 2 puntos faltantes.",
                     "Le envías el correo masivo de cobro para que realice el pago de inmediato."
                 ],
@@ -150,8 +385,8 @@
             equipos.forEach((eq, index) => {
                 const card = document.createElement('div');
                 card.className = `card-equipo ${index === turno ? 'turno-activo' : ''}`;
-                card.style.borderLeftColor = index === 0 ? '#e53e3e' : index === 1 ? '#3182ce' : index === 2 ? '#38a169' : '#dd6b20';
-                card.innerHTML = `${eq.nombre}<br><small>Casilla: ${eq.pos}</small>`;
+                card.style.borderLeftColor = eq.color;
+                card.innerHTML = `${eq.nombre}<br><small style="color: #64748b; font-weight: normal;">Casilla: ${eq.pos}</small>`;
                 container.appendChild(card);
             });
         }
@@ -163,7 +398,7 @@
                 const casilla = document.createElement('div');
                 casilla.className = 'casilla';
                 
-                let etiqueta = `${i}`;
+                let etiqueta = `<div>${i}</div>`;
                 if (casillasEspeciales[i]) {
                     const esp = casillasEspeciales[i];
                     if (esp.tipo === 'felicitaciones') { casilla.classList.add('especial-felicitaciones'); etiqueta += '<span>🎉 +3</span>'; }
@@ -229,6 +464,7 @@
         function lanzarPregunta(tipo) {
             let seleccionP;
             const box = document.getElementById('pregunta-box');
+            const overlay = document.getElementById('overlay');
             const titulo = document.getElementById('titulo-box');
             const texto = document.getElementById('texto-pregunta');
             const opcionesDiv = document.getElementById('opciones');
@@ -256,11 +492,13 @@
                 opcionesDiv.appendChild(btn);
             });
 
+            overlay.style.display = 'block';
             box.style.display = 'block';
         }
 
         function responder(esCorrecta, tipo) {
             document.getElementById('pregunta-box').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
             const eqActual = equipos[turno];
 
             if (tipo === 'caso') {
@@ -298,6 +536,7 @@
             document.getElementById('btn-dado').style.display = 'none';
             document.getElementById('resultado-dado').style.display = 'none';
             document.getElementById('nombre-ganador').innerText = nombreEquipo;
+            document.getElementById('overlay').style.display = 'block';
             document.getElementById('ganador-box').style.display = 'block';
         }
 
@@ -316,3 +555,4 @@
     </script>
 </body>
 </html>
+
