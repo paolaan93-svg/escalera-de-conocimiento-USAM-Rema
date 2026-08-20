@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escalera del Conocimiento USAM - Formación</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f4f8; padding: 15px; color: #102a43; }
-        h1 { color: #0b69a3; margin-bottom: 5px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f4f8; padding: 10px; color: #102a43; margin: 0; }
+        h1 { color: #0b69a3; margin: 5px 0; font-size: 24px; }
+        p.sub { margin: 2px 0 10px 0; font-size: 14px; }
         
-        #marcadores { display: flex; justify-content: center; gap: 15px; margin: 15px 0; flex-wrap: wrap; }
-        .card-equipo { background: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; font-weight: bold; width: 140px; }
+        #marcadores { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+        .card-equipo { background: white; padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; font-weight: bold; width: 120px; font-size: 13px; }
         .turno-activo { border-color: #0b69a3 !important; background-color: #e6f6ff !important; transform: scale(1.05); }
 
-        #tablero { display: grid; grid-template-columns: repeat(6, 85px); gap: 10px; justify-content: center; margin: 15px auto; }
-        .casilla { width: 85px; height: 85px; background-color: #334e68; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; border-radius: 8px; font-size: 13px; position: relative; }
-        .casilla span { font-size: 9px; margin-top: 3px; font-weight: normal; text-align: center; }
+        /* Ajuste a 10 columnas fijas para encajar las 40 casillas */
+        #tablero { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-width: 950px; margin: 10px auto; }
+        .casilla { height: 60px; background-color: #334e68; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; border-radius: 6px; font-size: 12px; position: relative; }
+        .casilla span { font-size: 9px; margin-top: 1px; font-weight: normal; text-align: center; }
         
-        .ficha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin: 1px; border: 1px solid white; }
+        .fichas-container { display: flex; gap: 2px; margin-top: 2px; }
+        .ficha { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid white; }
         .e0 { background-color: #e53e3e; } 
         .e1 { background-color: #3182ce; } 
         .e2 { background-color: #38a169; } 
         .e3 { background-color: #dd6b20; } 
 
+        .especial-felicitaciones { background-color: #d69e2e !important; color: #000 !important; }
         .especial-avanza { background-color: #2f855a !important; }
         .especial-companero { background-color: #0bc5ea !important; color: #000 !important; }
         .especial-retrocede { background-color: #c53030 !important; }
@@ -30,20 +34,20 @@
         button { padding: 10px 20px; font-size: 15px; font-weight: bold; background-color: #0b69a3; color: white; border: none; border-radius: 6px; cursor: pointer; }
         button:hover { background-color: #074d79; }
         
-        #pregunta-box, #ganador-box { display: none; background: white; border: 2px solid #0b69a3; padding: 20px; max-width: 500px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-        .btn-opcion { display: block; width: 100%; margin: 8px 0; background-color: #f0f4f8; color: #102a43; border: 1px solid #bccadc; text-align: left; padding: 10px; font-size: 14px; cursor: pointer; border-radius: 5px; }
+        #pregunta-box, #ganador-box { display: none; background: white; border: 2px solid #0b69a3; padding: 15px; max-width: 520px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .btn-opcion { display: block; width: 100%; margin: 6px 0; background-color: #f0f4f8; color: #102a43; border: 1px solid #bccadc; text-align: left; padding: 8px 12px; font-size: 13px; cursor: pointer; border-radius: 5px; }
         .btn-opcion:hover { background-color: #d9e2ec; }
     </style>
 </head>
 <body>
 
     <h1>🎲 Escalera del Conocimiento USAM</h1>
-    <p>Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
+    <p class="sub">Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
     
     <div id="marcadores"></div>
 
-    <button id="btn-dado" onclick="tirarDado()">Tirar Dado (Turno Actual) 🎲</button>
-    <h3 id="resultado-dado"></h3>
+    <button id="btn-dado" onclick="tirarDado()">Tirar Dado 🎲</button>
+    <h3 id="resultado-dado" style="margin: 8px 0; font-size: 16px;"></h3>
 
     <div id="tablero"></div>
 
@@ -56,7 +60,7 @@
     <div id="ganador-box">
         <h2 style="color: #2f855a; margin-top:0;">🏆 ¡TENEMOS UN EQUIPO GANADOR! 🏆</h2>
         <h3 id="nombre-ganador" style="color: #0b69a3;"></h3>
-        <p style="font-size: 16px; line-height: 1.5; color: #102a43; background: #e6f6ff; padding: 15px; border-radius: 8px; border: 1px dashed #0b69a3;">
+        <p style="font-size: 15px; line-height: 1.5; color: #102a43; background: #e6f6ff; padding: 15px; border-radius: 8px; border: 1px dashed #0b69a3;">
             🎉 <strong>¡Felicidades, campeones del Protocolo USAM!</strong><br><br>
             Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas y la correcta clasificación de casos en HubSpot.<br><br>
             Gracias a su excelencia y trabajo en equipo, garantizamos un servicio ético, ágil y profesional en Comunicaciones USAM. ¡Sigan liderando con el ejemplo! 👏✨
@@ -72,24 +76,33 @@
         ];
         
         let turno = 0;
-        const totalCasillas = 30;
+        const totalCasillas = 40;
 
         const casillasEspeciales = {
-            4: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
-            8: { tipo: 'avanza', texto: '🚀 ¡Avance de área! +3 casillas', cant: 3 },
+            5: { tipo: 'felicitaciones', texto: '🎉 ¡Felicitaciones! Avanzas 3 casillas por excelencia en el protocolo.', cant: 3 },
+            7: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            10: { tipo: 'avanza', texto: '🚀 ¡Proceso acelerado! Avanzas 2 casillas.', cant: 2 },
             12: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
-            15: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
-            18: { tipo: 'retrocede', texto: '⚠️ ¡Falta de autorización! Retrocedes 2 casillas', cant: -2 },
+            14: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            17: { tipo: 'felicitaciones', texto: '🎉 ¡Felicitaciones! Excelente gestión de casos en HubSpot. Avanzas 3 casillas.', cant: 3 },
+            20: { tipo: 'retrocede', texto: '⚠️ ¡Falta de autorización! Retrocedes 2 casillas.', cant: -2 },
             22: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
-            25: { tipo: 'avanza', texto: '🚀 ¡Caso escalado con éxito! +2 casillas', cant: 2 }
+            27: { tipo: 'avanza', texto: '🚀 ¡Caso escalado con éxito! Avanzas 2 casillas.', cant: 2 },
+            29: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
+            32: { tipo: 'felicitaciones', texto: '🎉 ¡Felicitaciones! Gran acompañamiento en rematrícula. Avanzas 3 casillas.', cant: 3 },
+            35: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            37: { tipo: 'retrocede', texto: '⚠️ ¡Error de clasificación en HubSpot! Retrocedes 2 casillas.', cant: -2 }
         };
 
         const preguntasRapidas = [
-            { q: "Un padre pide información de su hijo mayor de edad. ¿Qué se requiere?", opciones: ["Solo la cédula del padre", "Carta o correo de autorización del estudiante", "Nada, por ley se le entrega"], correcta: 1 },
+            { q: "Un padre pide información académica de su hijo mayor de edad. ¿Qué se requiere?", opciones: ["Solo la cédula del padre", "Carta o correo de autorización del estudiante", "Nada, por ser familiar se le entrega"], correcta: 1 },
             { q: "¿Límite máximo de créditos para inscripción directa por asesor?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
-            { q: "¿Rango de nota para optar por Examen Extraordinario?", opciones: ["50 a 59", "60 a 69", "70 a 79"], correcta: 1 },
+            { q: "¿Rango de nota para optar por Examen Extraordinario?", opciones: ["50 a 59 puntos", "60 a 69 puntos", "70 a 79 puntos"], correcta: 1 },
             { q: "¿Dónde se registra una consulta sobre el proceso de TCU en HubSpot?", opciones: ["Proceso de Grado", "Extensión e Internacionalización", "Información Académica"], correcta: 1 },
-            { q: "Un usuario presenta una propuesta de mejora. ¿Detalle en HubSpot?", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 }
+            { q: "Un usuario presenta una propuesta de mejora. ¿En qué detalle de HubSpot se clasifica?", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
+            { q: "¿Cómo se otorga el aval institucional para los Exámenes Extraordinarios?", opciones: ["Directamente la Universidad consolida e inscribe en Class/U-Virtual", "El estudiante negocia con el docente", "Se solicita en ventanilla física"], correcta: 0 },
+            { q: "Consultas sobre el 'Calendario Académico' deben clasificarse como:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
+            { q: "La solicitud de credenciales de Office 365 va registrada en:", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 }
         ];
 
         const casosPracticos = [
@@ -105,23 +118,23 @@
             {
                 q: "🎭 SITUACIÓN: Un estudiante con nota final de 58 en una materia pide que le habiliten el Examen Extraordinario en la U-Virtual porque 'solo le faltaron 2 puntos'. ¿Qué le respondes?",
                 opciones: [
-                    "Le explicas que el criterio de elegibilidad institucional es estrictamente para notas entre 60 y 69 puntos.",
+                    "Le explicas que el criterio de elegibilidad institucional es strictly para notas entre 60 y 69 puntos.",
                     "Hablas con el docente para que le suba los 2 puntos faltantes.",
                     "Le envías el correo masivo de cobro para que realice el pago de inmediato."
                 ],
                 correcta: 0
             },
             {
-                q: "🎭 SITUACIÓN: Un estudiante quiere llevar 21 créditos este cuatrimestre para graduarse rápido. Pretendes inscribirlo en el sistema pero no te deja. ¿Qué procedimiento corresponde?",
+                q: "🎭 SITUACIÓN: Un estudiante quiere llevar 21 créditos este cuatrimestre para acelerar su plan de estudios. ¿Qué procedimiento corresponde?",
                 opciones: [
                     "Decirle que es imposible y que máximo puede llevar 15 créditos.",
                     "Escalar el caso mediante la solicitud por levantamiento de requisitos para revisión especial.",
-                    "Inscribirle las materias manualmente con nota condicional."
+                    "Inscribirle las materias manualmente de forma directa."
                 ],
                 correcta: 1
             },
             {
-                q: "🎭 SITUACIÓN: Un estudiante solicita en ventanilla una constancia de materias aprobadas y un plan de estudios. ¿Cómo categorizas sus consultas en HubSpot?",
+                q: "🎭 SITUACIÓN: Un estudiante solicita una constancia de materias aprobadas y una copia de su plan de estudios. ¿Cómo categorizas sus consultas en HubSpot?",
                 opciones: [
                     "Constancias -> Solicitud de Constancias e Información Académica -> Solicitud Plan de Estudios.",
                     "Ambas dentro de 'Proceso de Grado'.",
@@ -153,7 +166,8 @@
                 let etiqueta = `${i}`;
                 if (casillasEspeciales[i]) {
                     const esp = casillasEspeciales[i];
-                    if (esp.tipo === 'avanza') { casilla.classList.add('especial-avanza'); etiqueta += '<span>🚀 +3</span>'; }
+                    if (esp.tipo === 'felicitaciones') { casilla.classList.add('especial-felicitaciones'); etiqueta += '<span>🎉 +3</span>'; }
+                    if (esp.tipo === 'avanza') { casilla.classList.add('especial-avanza'); etiqueta += '<span>🚀 +2</span>'; }
                     if (esp.tipo === 'companero') { casilla.classList.add('especial-companero'); etiqueta += '<span>🤝 Ayuda</span>'; }
                     if (esp.tipo === 'retrocede') { casilla.classList.add('especial-retrocede'); etiqueta += '<span>⚠️ -2</span>'; }
                     if (esp.tipo === 'caso') { casilla.classList.add('especial-caso'); etiqueta += '<span>🎭 Caso</span>'; }
@@ -162,6 +176,7 @@
                 casilla.innerHTML = etiqueta;
 
                 const fichasDiv = document.createElement('div');
+                fichasDiv.className = 'fichas-container';
                 equipos.forEach((eq) => {
                     if (eq.pos === i) {
                         const f = document.createElement('span');
@@ -191,8 +206,8 @@
             const especial = casillasEspeciales[eqActual.pos];
 
             if (especial) {
-                if (especial.tipo === 'avanza') {
-                    alert(`¡Casilla Especial! ${especial.texto}`);
+                if (especial.tipo === 'felicitaciones' || especial.tipo === 'avanza') {
+                    alert(`${especial.texto}`);
                     eqActual.pos = Math.min(eqActual.pos + especial.cant, totalCasillas);
                     actualizarInterfaz();
                     pasoSiguiente();
@@ -301,5 +316,3 @@
     </script>
 </body>
 </html>
-
-
