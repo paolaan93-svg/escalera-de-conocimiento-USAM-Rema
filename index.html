@@ -286,7 +286,7 @@
 
     <header>
         <h1>🎲 Escalera del Conocimiento USAM</h1>
-        <p class="sub">Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
+        <p class="sub">Formación interactiva - Protocolo USAM, HubSpot y Cultura General</p>
     </header>
     
     <div id="marcadores"></div>
@@ -311,7 +311,7 @@
         <h3 id="nombre-ganador" style="color: var(--primary); margin-bottom: 15px;"></h3>
         <p style="font-size: 14px; line-height: 1.6; color: #334155; background: #f0f7ff; padding: 16px; border-radius: 8px; border: 1px dashed var(--primary); text-align: left;">
             🎉 <strong>¡Felicidades, campeones del Protocolo USAM!</strong><br><br>
-            Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas y la correcta clasificación de casos en HubSpot.<br><br>
+            Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas, la correcta clasificación de casos en HubSpot y cultura general.<br><br>
             Gracias a su excelencia y trabajo en equipo, garantizamos un servicio ético, ágil y profesional en Comunicaciones USAM. ¡Sigan liderando con el ejemplo! 👏✨
         </p>
     </div>
@@ -343,7 +343,7 @@
             37: { tipo: 'retrocede', texto: '⚠️ ¡Error de clasificación en HubSpot! Retrocedes 2 casillas.', cant: -2 }
         };
 
-        const preguntasRapidas = [
+        const preguntasProtocolo = [
             { q: "Un padre pide información académica de su hijo mayor de edad. ¿Qué se requiere?", opciones: ["Solo la cédula del padre", "Carta o correo de autorización del estudiante", "Nada, por ser familiar se le entrega"], correcta: 1 },
             { q: "¿Límite máximo de créditos para inscripción directa por asesor?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
             { q: "¿Rango de nota para optar por Examen Extraordinario?", opciones: ["50 a 59 puntos", "60 a 69 puntos", "70 a 79 puntos"], correcta: 1 },
@@ -351,7 +351,22 @@
             { q: "Un usuario presenta una propuesta de mejora. ¿En qué detalle de HubSpot se clasifica?", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
             { q: "¿Cómo se otorga el aval institucional para los Exámenes Extraordinarios?", opciones: ["Directamente la Universidad consolida e inscribe en Class/U-Virtual", "El estudiante negocia con el docente", "Se solicita en ventanilla física"], correcta: 0 },
             { q: "Consultas sobre el 'Calendario Académico' deben clasificarse como:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
-            { q: "La solicitud de credenciales de Office 365 va registrada en:", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 }
+            { q: "La solicitud de credenciales de Office 365 va registrada en:", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 },
+            { q: "Si un estudiante requiere más de 18 créditos, ¿cuál es el canal de trámite?", opciones: ["Aprobación verbal del asesor", "Caso por levantamiento de requisitos", "Enviar correo a contabilidad"], correcta: 1 },
+            { q: "La solicitud de retiro o congelamiento de estudiante regular se clasifica en:", opciones: ["Proceso de Grado", "Baja de Carrera", "Acreditación"], correcta: 1 }
+        ];
+
+        const preguntasCulturaGeneral = [
+            { q: "🌐 CULTURA GENERAL: ¿Cuál es el océano más grande del planeta?", opciones: ["Océano Atlántico", "Océano Pacífico", "Océano Índico"], correcta: 1 },
+            { q: "🎨 CULTURA GENERAL: ¿Quién pintó la célebre obra 'La Mona Lisa'?", opciones: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso"], correcta: 1 },
+            { q: "🌍 CULTURA GENERAL: ¿Cuál es el río más largo del mundo?", opciones: ["Río Nilo", "Río Amazonas", "Río Misisipi"], correcta: 1 },
+            { q: "🏛️ CULTURA GENERAL: ¿En qué país se encuentran las famosas Pirámides de Guiza?", opciones: ["Grecia", "Egipto", "México"], correcta: 1 },
+            { q: "🚀 CULTURA GENERAL: ¿Cuál es el planeta más grande de nuestro sistema solar?", opciones: ["Saturno", "Júpiter", "Neptuno"], correcta: 1 },
+            { q: "📚 CULTURA GENERAL: ¿Quién escribió la novela 'Cien años de soledad'?", opciones: ["Mario Vargas Llosa", "Gabriel García Márquez", "Isabel Allende"], correcta: 1 },
+            { q: "🎵 CULTURA GENERAL: ¿Cuántas notas musicales existen en la escala diatónica natural?", opciones: ["5 notas", "7 notas", "12 notas"], correcta: 1 },
+            { q: "🏔️ CULTURA GENERAL: ¿En qué cordillera se encuentra la montaña Everest?", opciones: ["Los Andes", "El Himalaya", "Los Alpes"], correcta: 1 },
+            { q: "🔬 CULTURA GENERAL: ¿Cuál es el elemento químico más abundante en la atmósfera terrestre?", opciones: ["Oxígeno", "Nitrógeno", "Hidrógeno"], correcta: 1 },
+            { q: "🎬 CULTURA GENERAL: ¿Qué película ganó el primer Oscar a la Mejor Película de Animación?", opciones: ["Toy Story", "Shrek", "El Rey León"], correcta: 1 }
         ];
 
         const casosPracticos = [
@@ -487,11 +502,20 @@
                 seleccionP = casosPracticos[Math.floor(Math.random() * casosPracticos.length)];
                 titulo.innerText = `🎭 DESAFÍO DE SIMULACIÓN - ${eqActual.nombre}`;
             } else if (tipo === 'companero') {
-                seleccionP = preguntasRapidas[Math.floor(Math.random() * preguntasRapidas.length)];
+                // Selecciona aleatoriamente entre protocolo y cultura general para la ayuda colaborativa
+                const bancoMixto = [...preguntasProtocolo, ...preguntasCulturaGeneral];
+                seleccionP = bancoMixto[Math.floor(Math.random() * bancoMixto.length)];
                 titulo.innerText = `🤝 DESAFÍO COLABORATIVO - ${eqActual.nombre}`;
             } else {
-                seleccionP = preguntasRapidas[Math.floor(Math.random() * preguntasRapidas.length)];
-                titulo.innerText = `❓ Pregunta de Protocolo USAM - ${eqActual.nombre}`;
+                // Alterna entre preguntas de protocolo (60% probabilidad) y cultura general (40% probabilidad)
+                const esCulturaGeneral = Math.random() < 0.4;
+                if (esCulturaGeneral) {
+                    seleccionP = preguntasCulturaGeneral[Math.floor(Math.random() * preguntasCulturaGeneral.length)];
+                    titulo.innerText = `🌍 Pregunta de Cultura General - ${eqActual.nombre}`;
+                } else {
+                    seleccionP = preguntasProtocolo[Math.floor(Math.random() * preguntasProtocolo.length)];
+                    titulo.innerText = `❓ Pregunta de Protocolo USAM - ${eqActual.nombre}`;
+                }
             }
 
             texto.innerText = seleccionP.q;
@@ -568,4 +592,5 @@
     </script>
 </body>
 </html>
+
 
