@@ -17,19 +17,20 @@
         .casilla span { font-size: 9px; margin-top: 3px; font-weight: normal; text-align: center; }
         
         .ficha { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin: 1px; border: 1px solid white; }
-        .e0 { background-color: #e53e3e; } /* Rojo */
-        .e1 { background-color: #3182ce; } /* Azul */
-        .e2 { background-color: #38a169; } /* Verde */
-        .e3 { background-color: #dd6b20; } /* Naranja */
+        .e0 { background-color: #e53e3e; } 
+        .e1 { background-color: #3182ce; } 
+        .e2 { background-color: #38a169; } 
+        .e3 { background-color: #dd6b20; } 
 
         .especial-avanza { background-color: #2f855a !important; }
         .especial-companero { background-color: #0bc5ea !important; color: #000 !important; }
         .especial-retrocede { background-color: #c53030 !important; }
+        .especial-caso { background-color: #805ad5 !important; }
 
         button { padding: 10px 20px; font-size: 15px; font-weight: bold; background-color: #0b69a3; color: white; border: none; border-radius: 6px; cursor: pointer; }
         button:hover { background-color: #074d79; }
         
-        #pregunta-box { display: none; background: white; border: 2px solid #0b69a3; padding: 20px; max-width: 500px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        #pregunta-box, #ganador-box { display: none; background: white; border: 2px solid #0b69a3; padding: 20px; max-width: 500px; margin: 15px auto; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .btn-opcion { display: block; width: 100%; margin: 8px 0; background-color: #f0f4f8; color: #102a43; border: 1px solid #bccadc; text-align: left; padding: 10px; font-size: 14px; cursor: pointer; border-radius: 5px; }
         .btn-opcion:hover { background-color: #d9e2ec; }
     </style>
@@ -37,7 +38,7 @@
 <body>
 
     <h1>🎲 Escalera del Conocimiento USAM</h1>
-    <p>Formación interactiva - 1 Hora de Capacitación</p>
+    <p>Formación interactiva - Taller Práctico de Protocolo y HubSpot</p>
     
     <div id="marcadores"></div>
 
@@ -52,6 +53,16 @@
         <div id="opciones"></div>
     </div>
 
+    <div id="ganador-box">
+        <h2 style="color: #2f855a; margin-top:0;">🏆 ¡TENEMOS UN EQUIPO GANADOR! 🏆</h2>
+        <h3 id="nombre-ganador" style="color: #0b69a3;"></h3>
+        <p style="font-size: 16px; line-height: 1.5; color: #102a43; background: #e6f6ff; padding: 15px; border-radius: 8px; border: 1px dashed #0b69a3;">
+            🎉 <strong>¡Felicidades, campeones del Protocolo USAM!</strong><br><br>
+            Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas y la correcta clasificación de casos en HubSpot.<br><br>
+            Gracias a su excelencia y trabajo en equipo, garantizamos un servicio ético, ágil y profesional en Comunicaciones USAM. ¡Sigan liderando con el ejemplo! 👏✨
+        </p>
+    </div>
+
     <script>
         const equipos = [
             { nombre: "Equipo Rojo", pos: 1, clase: "e0" },
@@ -64,24 +75,60 @@
         const totalCasillas = 30;
 
         const casillasEspeciales = {
-            6: { tipo: 'avanza', texto: '🚀 ¡Avance de área! +3 casillas', cant: 3 },
-            11: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
-            16: { tipo: 'retrocede', texto: '⚠️ ¡Falta de autorización! Retrocedes 2 casillas', cant: -2 },
-            21: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
-            26: { tipo: 'avanza', texto: '🚀 ¡Caso escalado con éxito! +2 casillas', cant: 2 }
+            4: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            8: { tipo: 'avanza', texto: '🚀 ¡Avance de área! +3 casillas', cant: 3 },
+            12: { tipo: 'companero', texto: '🤝 ¡Ayuda Interdepartamental! Elije a alguien de otro equipo.' },
+            15: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            18: { tipo: 'retrocede', texto: '⚠️ ¡Falta de autorización! Retrocedes 2 casillas', cant: -2 },
+            22: { tipo: 'caso', texto: '🎭 ¡CASO DE SIMULACIÓN REAL!' },
+            25: { tipo: 'avanza', texto: '🚀 ¡Caso escalado con éxito! +2 casillas', cant: 2 }
         };
 
-        const preguntas = [
-            { q: "Un padre pide información académica de su hijo mayor de edad. ¿Qué procede?", opciones: ["Entregar datos por ser familiar directo", "Exigir correo/carta formal firmada por el estudiante", "Dar información solo si paga la mensualidad"], correcta: 1 },
-            { q: "¿Cuál es el límite máximo de créditos que un asesor puede inscribir de forma directa?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
-            { q: "Si un estudiante requiere más de 18 créditos para acelerar plan, ¿qué se hace?", opciones: ["Inscribir directamente de palabra", "Escalar caso por levantamiento de requisitos", "Rechazar la solicitud de inmediato"], correcta: 1 },
-            { q: "¿Cuál es el rango de nota final para optar por Examen Extraordinario?", opciones: ["50 a 59", "60 a 69", "70 a 79"], correcta: 1 },
-            { q: "¿Cómo se otorga el aval institucional para los Exámenes Extraordinarios?", opciones: ["Directamente la Universidad consolida e inscribe en Class/U-Virtual", "El estudiante debe negociar con el docente", "El apoderado firma una carta"], correcta: 0 },
-            { q: "¿En qué detalle de HubSpot se registra una consulta sobre TCU?", opciones: ["Proceso de Grado", "Extensión e Internacionalización", "Información Académica"], correcta: 1 },
-            { q: "Las sugerencias y oportunidades de mejora deben clasificarse en:", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 },
-            { q: "Las consultas sobre 'Calendario Académico' van registradas bajo:", opciones: ["Constancias", "Información Académica", "Acreditación"], correcta: 1 },
-            { q: "Un estudiante pide credenciales de Office 365. ¿En qué detalle de HubSpot va?", opciones: ["Accesos y Contenido a Plataformas", "Información Académica", "Baja de Carrera"], correcta: 0 },
-            { q: "Retiro o congelamiento de un estudiante regular se clasifica como:", opciones: ["Proceso de Grado", "Baja de Carrera", "Acreditación"], correcta: 1 }
+        const preguntasRapidas = [
+            { q: "Un padre pide información de su hijo mayor de edad. ¿Qué se requiere?", opciones: ["Solo la cédula del padre", "Carta o correo de autorización del estudiante", "Nada, por ley se le entrega"], correcta: 1 },
+            { q: "¿Límite máximo de créditos para inscripción directa por asesor?", opciones: ["15 créditos", "18 créditos", "24 créditos"], correcta: 1 },
+            { q: "¿Rango de nota para optar por Examen Extraordinario?", opciones: ["50 a 59", "60 a 69", "70 a 79"], correcta: 1 },
+            { q: "¿Dónde se registra una consulta sobre el proceso de TCU en HubSpot?", opciones: ["Proceso de Grado", "Extensión e Internacionalización", "Información Académica"], correcta: 1 },
+            { q: "Un usuario presenta una propuesta de mejora. ¿Detalle en HubSpot?", opciones: ["Sugerencias", "Accesos y Contenido", "Constancias"], correcta: 0 }
+        ];
+
+        const casosPracticos = [
+            {
+                q: "🎭 SITUACIÓN: Un patrono llama insistiendo que necesita confirmar la matrícula de un empleado mayor de edad porque la empresa paga sus estudios. ¿Cómo actúas?",
+                opciones: [
+                    "Le das la información por ser quien financia la carrera.",
+                    "Explicas amablemente que por norma de privacidad se requiere la autorización escrita firmada por el estudiante.",
+                    "Le pides la cédula jurídica de la empresa y le das el informe."
+                ],
+                correcta: 1
+            },
+            {
+                q: "🎭 SITUACIÓN: Un estudiante con nota final de 58 en una materia pide que le habiliten el Examen Extraordinario en la U-Virtual porque 'solo le faltaron 2 puntos'. ¿Qué le respondes?",
+                opciones: [
+                    "Le explicas que el criterio de elegibilidad institucional es estrictamente para notas entre 60 y 69 puntos.",
+                    "Hablas con el docente para que le suba los 2 puntos faltantes.",
+                    "Le envías el correo masivo de cobro para que realice el pago de inmediato."
+                ],
+                correcta: 0
+            },
+            {
+                q: "🎭 SITUACIÓN: Un estudiante quiere llevar 21 créditos este cuatrimestre para graduarse rápido. Pretendes inscribirlo en el sistema pero no te deja. ¿Qué procedimiento corresponde?",
+                opciones: [
+                    "Decirle que es imposible y que máximo puede llevar 15 créditos.",
+                    "Escalar el caso mediante la solicitud por levantamiento de requisitos para revisión especial.",
+                    "Inscribirle las materias manualmente con nota condicional."
+                ],
+                correcta: 1
+            },
+            {
+                q: "🎭 SITUACIÓN: Un estudiante solicita en ventanilla una constancia de materias aprobadas y un plan de estudios. ¿Cómo categorizas sus consultas en HubSpot?",
+                opciones: [
+                    "Constancias -> Solicitud de Constancias e Información Académica -> Solicitud Plan de Estudios.",
+                    "Ambas dentro de 'Proceso de Grado'.",
+                    "Ambas en 'Aranceles y Matrículas'."
+                ],
+                correcta: 0
+            }
         ];
 
         function renderMarcadores() {
@@ -109,13 +156,13 @@
                     if (esp.tipo === 'avanza') { casilla.classList.add('especial-avanza'); etiqueta += '<span>🚀 +3</span>'; }
                     if (esp.tipo === 'companero') { casilla.classList.add('especial-companero'); etiqueta += '<span>🤝 Ayuda</span>'; }
                     if (esp.tipo === 'retrocede') { casilla.classList.add('especial-retrocede'); etiqueta += '<span>⚠️ -2</span>'; }
+                    if (esp.tipo === 'caso') { casilla.classList.add('especial-caso'); etiqueta += '<span>🎭 Caso</span>'; }
                 }
 
                 casilla.innerHTML = etiqueta;
 
-                // Fichas de equipos
                 const fichasDiv = document.createElement('div');
-                equipos.forEach((eq, idx) => {
+                equipos.forEach((eq) => {
                     if (eq.pos === i) {
                         const f = document.createElement('span');
                         f.className = `ficha ${eq.clase}`;
@@ -155,67 +202,88 @@
                     actualizarInterfaz();
                     pasoSiguiente();
                 } else if (especial.tipo === 'companero') {
-                    lanzarPregunta(true);
+                    lanzarPregunta('companero');
+                } else if (especial.tipo === 'caso') {
+                    lanzarPregunta('caso');
                 }
             } else {
-                lanzarPregunta(false);
+                lanzarPregunta('normal');
             }
         }
 
-        function lanzarPregunta(esCompanero) {
-            const randomP = preguntas[Math.floor(Math.random() * preguntas.length)];
+        function lanzarPregunta(tipo) {
+            let seleccionP;
             const box = document.getElementById('pregunta-box');
             const titulo = document.getElementById('titulo-box');
             const texto = document.getElementById('texto-pregunta');
             const opcionesDiv = document.getElementById('opciones');
             const eqActual = equipos[turno];
 
-            if (esCompanero) {
-                titulo.innerText = `🤝 ¡DESAFÍO COLABORATIVO - ${eqActual.nombre}!`;
-                texto.innerHTML = `<strong>Elijan a un compañero de OTRO equipo para responder.</strong><br>Si responde correctamente: ¡Ambos equipos avanzan 2 casillas!<br><br><strong>Pregunta:</strong> ${randomP.q}`;
+            if (tipo === 'caso') {
+                seleccionP = casosPracticos[Math.floor(Math.random() * casosPracticos.length)];
+                titulo.innerText = `🎭 DESAFÍO DE SIMULACIÓN - ${eqActual.nombre}`;
+            } else if (tipo === 'companero') {
+                seleccionP = preguntasRapidas[Math.floor(Math.random() * preguntasRapidas.length)];
+                titulo.innerText = `🤝 DESAFÍO COLABORATIVO - ${eqActual.nombre}`;
             } else {
-                titulo.innerText = `❓ Pregunta para ${eqActual.nombre}`;
-                texto.innerText = randomP.q;
+                seleccionP = preguntasRapidas[Math.floor(Math.random() * preguntasRapidas.length)];
+                titulo.innerText = `❓ Pregunta de Protocolo USAM - ${eqActual.nombre}`;
             }
 
+            texto.innerText = seleccionP.q;
             opcionesDiv.innerHTML = '';
-            randomP.opciones.forEach((op, index) => {
+
+            seleccionP.opciones.forEach((op, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'btn-opcion';
                 btn.innerText = `${String.fromCharCode(65 + index)}) ${op}`;
-                btn.onclick = () => responder(index === randomP.correcta, esCompanero);
+                btn.onclick = () => responder(index === seleccionP.correcta, tipo);
                 opcionesDiv.appendChild(btn);
             });
 
             box.style.display = 'block';
         }
 
-        function responder(esCorrecta, esCompanero) {
+        function responder(esCorrecta, tipo) {
             document.getElementById('pregunta-box').style.display = 'none';
             const eqActual = equipos[turno];
 
-            if (esCompanero) {
+            if (tipo === 'caso') {
                 if (esCorrecta) {
-                    alert("¡Respuesta Correcta! Excelente trabajo en equipo. Su equipo y el seleccionado avanzan 2 casillas.");
+                    alert("¡Excelente resolución del caso! Demostraron conocimiento perfecto del protocolo. ¡Avanzan 1 casilla extra! 🌟");
+                    eqActual.pos = Math.min(eqActual.pos + 1, totalCasillas);
+                } else {
+                    alert("Resolución incorrecta. Ese manejo habría generado una falta de protocolo o un error en HubSpot.");
+                }
+            } else if (tipo === 'companero') {
+                if (esCorrecta) {
+                    alert("¡Excelente trabajo en equipo! Respuesta correcta. Ambos equipos avanzan 2 casillas. 🤝");
                     eqActual.pos = Math.min(eqActual.pos + 2, totalCasillas);
                 } else {
-                    alert("Respuesta Incorrecta. No hay avance colaborativo en esta turno.");
+                    alert("Respuesta incorrecta. Se quedan en su casilla.");
                 }
             } else {
                 if (esCorrecta) {
-                    alert("¡Correcto! Mantienen su posición.");
+                    alert("¡Respuesta Correcta! Mantienen su posición.");
                 } else {
-                    alert("Respuesta incorrecta. Retroceden 1 casilla por fallo de protocolo.");
+                    alert("Respuesta incorrecta. Retroceden 1 casilla.");
                     eqActual.pos = Math.max(eqActual.pos - 1, 1);
                 }
             }
 
             if (eqActual.pos >= totalCasillas) {
-                alert(`🎉 ¡FELICIDADES! El ${eqActual.nombre} ha llegado a la meta y ganado el Torneo USAM.`);
+                mostrarGanador(eqActual.nombre);
                 return;
             }
 
             pasoSiguiente();
+        }
+
+        function mostrarGanador(nombreEquipo) {
+            document.getElementById('btn-dado').style.display = 'none';
+            document.getElementById('resultado-dado').style.display = 'none';
+            document.getElementById('nombre-ganador').innerText = nombreEquipo;
+            document.getElementById('ganador-box').style.display = 'block';
         }
 
         function pasoSiguiente() {
