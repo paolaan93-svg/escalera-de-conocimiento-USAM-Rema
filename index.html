@@ -8,18 +8,17 @@
         :root {
             --primary: #003366;
             --primary-light: #004080;
-            --accent: #ff9900;
             --bg: #f4f7fa;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --border-color: #cbd5e1;
             
-            /* Colores de Casillas Especiales */
-            --color-felicitaciones: #f59e0b;
-            --color-avanza: #10b981;
-            --color-companero: #06b6d4;
-            --color-retrocede: #ef4444;
-            --color-caso: #8b5cf6;
+            /* Colores Institucionales de Casillas Especiales */
+            --color-felicitaciones: #d69e2e;
+            --color-avanza: #2f855a;
+            --color-companero: #0bc5ea;
+            --color-retrocede: #c53030;
+            --color-caso: #805ad5;
         }
 
         * {
@@ -48,7 +47,6 @@
             color: var(--primary);
             font-size: 26px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
         p.sub {
@@ -75,16 +73,16 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
             border-left-width: 6px;
-            font-weight: 600;
-            width: 130px;
-            font-size: 13px;
+            font-weight: 700;
+            width: 140px;
+            font-size: 14px;
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .turno-activo {
             border-color: var(--primary) !important;
-            background-color: #f0f7ff !important;
+            background-color: #e6f6ff !important;
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0,51,102,0.15);
         }
@@ -111,13 +109,11 @@
         button.btn-dado:hover:not(:disabled) {
             background-color: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,51,102,0.3);
         }
 
         button.btn-dado:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
         #resultado-dado {
@@ -143,8 +139,8 @@
         }
 
         .casilla {
-            height: 68px;
-            background-color: #334155;
+            height: 70px;
+            background-color: #334e68;
             color: white;
             display: flex;
             flex-direction: column;
@@ -155,12 +151,6 @@
             border-radius: 8px;
             font-size: 13px;
             position: relative;
-            transition: transform 0.2s ease;
-        }
-
-        .casilla:hover {
-            transform: scale(1.03);
-            z-index: 2;
         }
 
         .casilla span {
@@ -170,39 +160,41 @@
             line-height: 1;
             padding: 2px 4px;
             border-radius: 4px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
         }
 
-        /* Fichas */
+        /* Fichas de los Equipos en las Casillas */
         .fichas-container {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             justify-content: center;
             align-items: center;
-            min-height: 12px;
+            min-height: 14px;
         }
 
         .ficha {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             border: 1.5px solid white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            display: inline-block;
         }
 
-        .e0 { background-color: #ef4444; } 
-        .e1 { background-color: #3b82f6; } 
-        .e2 { background-color: #10b981; } 
-        .e3 { background-color: #f97316; } 
+        /* Definición explícita de colores por clases */
+        .e0 { background-color: #e53e3e !important; } /* Rojo */
+        .e1 { background-color: #3182ce !important; } /* Azul */
+        .e2 { background-color: #38a169 !important; } /* Verde */
+        .e3 { background-color: #dd6b20 !important; } /* Naranja */
 
-        /* Clases Especiales Casillas */
+        /* Casillas Especiales */
         .especial-felicitaciones { background-color: var(--color-felicitaciones) !important; color: #000 !important; }
         .especial-avanza { background-color: var(--color-avanza) !important; }
         .especial-companero { background-color: var(--color-companero) !important; color: #000 !important; }
         .especial-retrocede { background-color: var(--color-retrocede) !important; }
         .especial-caso { background-color: var(--color-caso) !important; }
 
-        /* Popups de Preguntas y Ganador */
+        /* Modal Popups */
         #pregunta-box, #ganador-box {
             display: none;
             position: fixed;
@@ -245,16 +237,13 @@
             font-size: 13px;
             cursor: pointer;
             border-radius: 6px;
-            transition: all 0.2s ease;
             line-height: 1.4;
         }
 
         .btn-opcion:hover {
             background-color: #e2e8f0;
-            border-color: #94a3b8;
         }
 
-        /* Overlay para oscurecer fondo al abrir modal */
         #overlay {
             display: none;
             position: fixed;
@@ -263,7 +252,6 @@
             width: 100%;
             height: 100%;
             background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(2px);
             z-index: 90;
         }
     </style>
@@ -295,7 +283,7 @@
     <div id="ganador-box">
         <h2 style="color: var(--color-avanza); margin-bottom: 10px;">🏆 ¡TENEMOS UN EQUIPO GANADOR! 🏆</h2>
         <h3 id="nombre-ganador" style="color: var(--primary); margin-bottom: 15px;"></h3>
-        <p style="font-size: 14px; line-height: 1.6; color: #334155; background: #f0f7ff; padding: 16px; border-radius: 8px; border: 1px dashed var(--primary); text-align: left;">
+        <p style="font-size: 14px; line-height: 1.6; color: #334155; background: #e6f6ff; padding: 16px; border-radius: 8px; border: 1px dashed var(--primary); text-align: left;">
             🎉 <strong>¡Felicidades, campeones del Protocolo USAM!</strong><br><br>
             Demostraron un dominio excepcional sobre la protección de datos de nuestros estudiantes, el manejo experto de cargas académicas y la correcta clasificación de casos en HubSpot.<br><br>
             Gracias a su excelencia y trabajo en equipo, garantizamos un servicio ético, ágil y profesional en Comunicaciones USAM. ¡Sigan liderando con el ejemplo! 👏✨
@@ -304,10 +292,10 @@
 
     <script>
         const equipos = [
-            { nombre: "Equipo Rojo", pos: 1, clase: "e0", color: "#ef4444" },
-            { nombre: "Equipo Azul", pos: 1, clase: "e1", color: "#3b82f6" },
-            { nombre: "Equipo Verde", pos: 1, clase: "e2", color: "#10b981" },
-            { nombre: "Equipo Naranja", pos: 1, clase: "e3", color: "#f97316" }
+            { nombre: "Equipo Rojo", pos: 1, clase: "e0", color: "#e53e3e" },
+            { nombre: "Equipo Azul", pos: 1, clase: "e1", color: "#3182ce" },
+            { nombre: "Equipo Verde", pos: 1, clase: "e2", color: "#38a169" },
+            { nombre: "Equipo Naranja", pos: 1, clase: "e3", color: "#dd6b20" }
         ];
         
         let turno = 0;
@@ -386,7 +374,7 @@
                 const card = document.createElement('div');
                 card.className = `card-equipo ${index === turno ? 'turno-activo' : ''}`;
                 card.style.borderLeftColor = eq.color;
-                card.innerHTML = `${eq.nombre}<br><small style="color: #64748b; font-weight: normal;">Casilla: ${eq.pos}</small>`;
+                card.innerHTML = `<span style="color: ${eq.color};">${eq.nombre}</span><br><small style="color: #64748b; font-weight: normal;">Casilla: ${eq.pos}</small>`;
                 container.appendChild(card);
             });
         }
@@ -429,7 +417,7 @@
             const dado = Math.floor(Math.random() * 4) + 1;
             const eqActual = equipos[turno];
 
-            document.getElementById('resultado-dado').innerText = `${eqActual.nombre} tiró el dado y sacó: ${dado} 🎲`;
+            document.getElementById('resultado-dado').innerHTML = `<span style="color: ${eqActual.color}">${eqActual.nombre}</span> tiró el dado y sacó: <strong>${dado} 🎲</strong>`;
             eqActual.pos = Math.min(eqActual.pos + dado, totalCasillas);
             
             actualizarInterfaz();
@@ -555,4 +543,3 @@
     </script>
 </body>
 </html>
-
